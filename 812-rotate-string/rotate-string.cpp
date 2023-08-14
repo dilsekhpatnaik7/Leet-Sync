@@ -10,7 +10,7 @@ public:
         }
 
         int k = goal.size();
-        while(k) {
+        while(k != 0) {
             char ch = q2.front();
             q2.pop();
             q2.push(ch);
