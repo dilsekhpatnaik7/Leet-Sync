@@ -1,12 +1,14 @@
 class Solution {
 public:
-    void generateAllBinaryStrings(int index, int num, string str, vector<string>& res) {
+    void generateAllBinaryStrings(int index, int num, string str, string& ans, unordered_map<string, int>& map) {
         if(index == num) {
-            res.push_back(str);
+            if(map.find(str) == map.end()) {
+                ans = str;
+            }
             return;
         }
-        generateAllBinaryStrings(index + 1, num, str + '0', res);
-        generateAllBinaryStrings(index + 1, num, str + '1', res);
+        generateAllBinaryStrings(index + 1, num, str + '0', ans, map);
+        generateAllBinaryStrings(index + 1, num, str + '1', ans, map);
     }
 
     string findDifferentBinaryString(vector<string>& nums) {
@@ -16,11 +18,8 @@ public:
         }
 
         int num = nums[0].size();
-        vector<string> res;
-        generateAllBinaryStrings(0, num, "", res);
-        for(auto i: res) {
-            if(map.find(i) == map.end()) return i;
-        }
-        return "";
+        string ans = "";
+        generateAllBinaryStrings(0, num, "", ans, map);
+        return ans;
     }
 };
