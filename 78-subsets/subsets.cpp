@@ -1,7 +1,7 @@
 class Solution {
 public:
     void generateSubsets(int index, int n, vector<int>& nums, vector<int>& temp, vector<vector<int>>& ans) {
-        if(index >= n) {
+        if(index == n) {
             ans.push_back(temp);
             return;
         }
