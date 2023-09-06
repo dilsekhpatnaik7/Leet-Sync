@@ -1,28 +1,28 @@
 class Solution {
 public:
-    vector<vector<int>> ans;
-    void helper(int i,vector<int> &nums,vector<int> &ds,int target,int k) {
-        if(i == nums.size()) {
+    void solve(int index, int target, int k, vector<int> &nums, vector<int> &ds, vector<vector<int>>& ans) {
+        if(index == nums.size()) {
             if(ds.size() == k and target == 0) {
                 ans.push_back(ds);
             }
             return;
         }
 
-        if(nums[i] <= target) {
-            ds.push_back(nums[i]);
-            helper(i+1, nums, ds, target-nums[i],k);
+        if(nums[index] <= target) {
+            ds.push_back(nums[index]);
+            solve(index + 1, target - nums[index], k, nums, ds, ans);
             ds.pop_back();
         }
-        helper(i+1, nums, ds, target,k);
+        solve(index + 1, target, k, nums, ds, ans);
     }
     vector<vector<int>> combinationSum3(int k, int n) {
         vector<int> nums;
         vector<int> ds;
-        for(int i = 1;i <= 9; i++) {
+        vector<vector<int>> ans;
+        for(int i = 1; i <= 9; i++) {
            nums.push_back(i);
         }
-        helper(0, nums, ds, n, k);
+        solve(0, n, k, nums, ds, ans);
         return ans;
     }
 };
