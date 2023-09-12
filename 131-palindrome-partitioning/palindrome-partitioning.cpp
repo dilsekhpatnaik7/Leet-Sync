@@ -1,34 +1,30 @@
 class Solution {
 public:
-    vector<vector<string>> partition(string s) {
-        vector<vector<string>> ret;
-        if(s.empty()) return ret;
-        
-        vector<string> path;
-        dfs(0, s, path, ret);
-        
-        return ret;
+    bool isPalindrome(string& s, int low, int high) {
+        while(low <= high) {
+            if(s[low++] != s[high--]) return false;
+        }
+        return true;
     }
 
-    void dfs(int index, string& s, vector<string>& path, vector<vector<string> >& ret) {
-        if(index == s.size()) {
-            ret.push_back(path);
-            return;
+    void solve(int index, string s, vector<string>& temp, vector<vector<string>>& ans) {
+        if(index == s.length()) {
+            ans.push_back(temp);
         }
-        for(int i = index; i < s.size(); ++i) {
+
+        for(int i = index; i < s.length(); i++) {
             if(isPalindrome(s, index, i)) {
-                path.push_back(s.substr(index, i - index + 1));
-                dfs(i+1, s, path, ret);
-                path.pop_back();
+                temp.push_back(s.substr(index, i - index + 1));
+                solve(i + 1, s, temp, ans);
+                temp.pop_back();
             }
         }
     }
-    
-    bool isPalindrome(const string& s, int start, int end) {
-        while(start <= end) {
-            if(s[start++] != s[end--])
-                return false;
-        }
-        return true;
+
+    vector<vector<string>> partition(string s) {
+        vector<string> temp;
+        vector<vector<string>> ans;
+        solve(0, s, temp, ans);
+        return ans; 
     }
 };
