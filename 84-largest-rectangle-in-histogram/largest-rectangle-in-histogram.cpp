@@ -10,12 +10,12 @@ public:
         }
     }
 
-    void rightSmaller(int n, vector<int>& heights, vector<int>& leftSmall, stack<int>& st) {
+    void rightSmaller(int n, vector<int>& heights, vector<int>& rightSmall, stack<int>& st) {
         for(int i = n - 1; i >= 0; i--) {
             while(!st.empty() && heights[st.top()] >= heights[i]) st.pop();
 
-            if(st.empty()) leftSmall[i] = n - 1;
-            else leftSmall[i] = st.top() - 1;
+            if(st.empty()) rightSmall[i] = n - 1;
+            else rightSmall[i] = st.top() - 1;
             st.push(i);
         }
     }
