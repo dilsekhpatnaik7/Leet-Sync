@@ -9,7 +9,7 @@
  */
 class Solution {
 public:
-    void markParents(TreeNode* root, unordered_map<TreeNode*, TreeNode*>& m, TreeNode* target) {
+    void markParents(TreeNode* root, unordered_map<TreeNode*, TreeNode*>& m) {
         queue<TreeNode*> q;
         q.push(root);
 
@@ -67,7 +67,7 @@ public:
         if(!root) return {};
      
         unordered_map<TreeNode*, TreeNode*> m;
-        markParents(root, m, target);
+        markParents(root, m);
 
         vector<int> ans;
         solve(root, m, target, k, ans);
