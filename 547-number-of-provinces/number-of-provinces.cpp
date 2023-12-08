@@ -1,9 +1,9 @@
 class Solution {
 public:
-    void solve(vector<vector<int>>& isConnected, int i, vector<int>& vis) {
-        vis[i] = 1;
-        for(int j = 0; j < isConnected.size(); j++) {
-            if(isConnected[i][j] && !vis[j]) solve(isConnected, j, vis);
+    void solve(int node, vector<int> adj[], vector<int>& vis) {
+        vis[node] = 1;
+        for(auto i: adj[node]) {
+            if(!vis[i]) solve(i, adj, vis);
         }
     }
 
@@ -11,11 +11,21 @@ public:
         int n = isConnected.size();
         if(!n) return 0;
 
-        int provinces = 0;
+        vector<int> adj[n];
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                if(isConnected[i][j] && i != j) {
+                    adj[i].push_back(j);
+                    adj[j].push_back(i);
+                }
+            }
+        }
+
         vector<int> vis(n);
+        int provinces = 0;
         for(int i = 0; i < n; i++) {
             if(!vis[i]) {
-                solve(isConnected, i, vis);
+                solve(i, adj, vis);
                 provinces++;
             }
         }
