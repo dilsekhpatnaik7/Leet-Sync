@@ -2,17 +2,14 @@ class Solution {
 public:
     int findSpecialInteger(vector<int>& arr) {
         int n = arr.size();
-        int requiredSize = n / 4;
-        int count = 1;
+        int quarter = n / 4;
 
-        int currentElement = arr[0];
-        for(int i = 1; i < n; i++) {
-            if(currentElement == arr[i]) count++;
-            else count = 1;
-
-            if(count > requiredSize) return arr[i];
-            currentElement = arr[i];
+        for (int i = 0; i < n - quarter; i++) {
+            if (arr[i] == arr[i + quarter]) {
+                return arr[i];
+            }
         }
-        return currentElement;
+
+        return -1;
     }
 };
