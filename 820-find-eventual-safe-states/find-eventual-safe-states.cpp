@@ -1,36 +1,34 @@
 class Solution {
 public:
-    bool dfs(int node, vector<vector<int>>& graph, vector<int>& vis, vector<int>& pathVis, vector<int>& check) {
-        vis[node] = 1;
-        pathVis[node] = 1;
-        check[node] = 0;
-
-        for(auto adjacentNode: graph[node]) {
-            if(!vis[adjacentNode] && dfs(adjacentNode, graph, vis, pathVis, check)) return true;
-            else if(pathVis[adjacentNode]) return true;
-        }
-
-        pathVis[node] = 0;
-        check[node] = 1;
-        return false;
-    }
-
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         int n = graph.size();
-        if(!n) return {};
-
-        vector<int> vis(n);
-        vector<int> pathVis(n);
-        vector<int> check(n);
+        vector<int> adjRev[n];
+        vector<int> indegree(n, 0);
+        for(int i = 0; i < n; i++) {
+            for(auto adjacentNode: graph[i]) {
+                adjRev[adjacentNode].push_back(i);
+                indegree[i]++;
+            }
+        }
+        
+        queue<int> q;
         vector<int> safeNodes;
-
+        
         for(int i = 0; i < n; i++) {
-            if(!vis[i]) dfs(i, graph, vis, pathVis, check);
+            if(indegree[i] == 0) q.push(i);
         }
-
-        for(int i = 0; i < n; i++) {
-            if(check[i]) safeNodes.push_back(i);
+        
+        while(!q.empty()) {
+            int node = q.front(); q.pop();
+            safeNodes.push_back(node);
+            
+            for(auto adjacentNode: adjRev[node]) {
+                indegree[adjacentNode]--;
+                if(indegree[adjacentNode] == 0) q.push(adjacentNode);
+            }
         }
+    
+        sort(safeNodes.begin(), safeNodes.end());
         return safeNodes;
     }
 };
