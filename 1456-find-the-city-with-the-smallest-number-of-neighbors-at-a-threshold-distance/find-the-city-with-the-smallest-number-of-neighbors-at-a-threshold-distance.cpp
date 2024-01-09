@@ -1,41 +1,28 @@
 class Solution {
 public:
     int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
-        vector<pair<int, int>> adj[n];
-        for(auto i: edges) {
-            adj[i[0]].push_back({i[1], i[2]});
-            adj[i[1]].push_back({i[0], i[2]});
+        vector<vector<int>> dist(n, vector<int>(n, 1e5));
+        for(int i = 0; i < n; i++) dist[i][i] = 0;
+        for(auto &edge : edges) {
+            dist[edge[0]][edge[1]] = dist[edge[1]][edge[0]] = edge[2];
         }
 
-        int countCity = n, city = -1;
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
-
-        for(int i = 0; i < n; i++) {
-            q.push({0, i});
-            vector<int> dist(n, 1e9);
-            dist[i] = 0;
-
-            while(!q.empty()) {
-                int distance = q.top().first;
-                int node = q.top().second;
-                q.pop();
-
-                for(auto it: adj[node]) {
-                    int weight = it.second;
-                    int adjacentNode = it.first;
-                    if(distance + weight < dist[adjacentNode]) {
-                        dist[adjacentNode] = distance + weight;
-                        q.push({distance + weight, adjacentNode});
-                    }
+        for(int k = 0; k < n; k++) {
+            for(int i = 0; i < n; i++) {
+                for(int j = 0; j < n; j++) {
+                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
                 }
             }
+        }
 
+        int city = -1, counting = n;
+        for(int i = 0; i < n; i++) {
             int count = 0;
             for(int j = 0; j < n; j++) {
-                if(dist[j] <= distanceThreshold) count++;
+                if(dist[i][j] <= distanceThreshold) count++;
             }
-            if(count <= countCity) {
-                countCity = count;
+            if(count <= counting) {
+                counting = count;
                 city = i;
             }
         }
