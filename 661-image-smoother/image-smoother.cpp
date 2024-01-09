@@ -1,38 +1,31 @@
 class Solution {
 public:
-    public:
-    std::vector<std::vector<int>> imageSmoother(std::vector<std::vector<int>>& img) {
-        int m = img.size();
-        int n = img[0].size();
-        std::vector<std::vector<int>> res(m, std::vector<int>(n, 0));
+    int bfs(int row, int col, int n, int m, vector<vector<int>>& img) {
+        int sum = 0, count = 0;
 
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                res[i][j] = smoothen(img, i, j);
-            }
-        }
+        for(int i = -1; i <= 1; i++) {
+            for(int j = -1; j <= 1; j++) {
+                int nrow = row + i;
+                int ncol = col + j;
 
-        return res;
-    }
-
-private:
-    int smoothen(const std::vector<std::vector<int>>& img, int x, int y) {
-        int m = img.size();
-        int n = img[0].size();
-        int sum = 0;
-        int count = 0;
-
-        for (int i = -1; i <= 1; ++i) {
-            for (int j = -1; j <= 1; ++j) {
-                int nx = x + i;
-                int ny = y + j;
-                if (nx >= 0 && nx < m && ny >= 0 && ny < n) {
-                    sum += img[nx][ny];
-                    ++count;
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m) {
+                    sum += img[nrow][ncol];
+                    count++;
                 }
             }
         }
-
         return sum / count;
+    }
+
+    vector<vector<int>> imageSmoother(vector<vector<int>>& img) {
+        int n = img.size(), m = img[0].size();
+        vector<vector<int>> ans(n, vector<int>(m, 0));
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                ans[i][j] = bfs(i, j, n, m, img);
+            }
+        }
+        return ans;
     }
 };
