@@ -8,13 +8,8 @@ public:
         int vacancy = 1;
         while(getline(s, node, ',')) {
             vacancy--;
-            if (vacancy < 0) {
-                return false;
-            }
-
-            if (node != "#") {
-                vacancy += 2;
-            }
+            if(vacancy < 0) return false;
+            if(node != "#") vacancy += 2;
         }
         return vacancy == 0;
     }
