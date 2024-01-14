@@ -1,20 +1,29 @@
 class Solution {
 public:
-    int minExtraChar(string s, vector<string>& dictionary) {
-        int max_val = s.length() + 1;
-        vector<int> dp(s.length() + 1, max_val);
-        dp[0] = 0;
+    int solve(int start, int end, string s, unordered_map<string, int>& m, vector<int>& dp) {
+        if (end >= s.size()) return end - start;
+        if (dp[start] != -1) return dp[start];
 
-        unordered_set<string> dictionary_set(dictionary.begin(), dictionary.end());
+        string temp = s.substr(start, end - start + 1);
+        int pick = 1e9;
 
-        for (int i = 1; i <= s.length(); ++i) {
-            dp[i] = dp[i - 1] + 1;
-            for (int l = 1; l <= i; ++l) {
-                if (dictionary_set.find(s.substr(i - l, l)) != dictionary_set.end()) {
-                    dp[i] = min(dp[i], dp[i - l]);
-                }
-            }
+        if(m.find(temp) != m.end()) {
+            pick = solve(end + 1, end + 1, s, m, dp);
         }
-        return dp.back();
+
+        int notPick = solve(start, end + 1, s, m, dp);
+        int skip = end - start + 1 + solve(end + 1, end + 1, s, m, dp);
+
+        return dp[start] = min({pick, notPick, skip});
+    }    
+
+    int minExtraChar(string s, vector<string>& dictionary) {
+        unordered_map<string, int> m;
+        for(auto i: dictionary) {
+            m[i]++;
+        }
+        int n = s.size();
+        vector<int> dp(n + 1, -1);
+        return solve(0, 0, s, m, dp);
     }
 };
