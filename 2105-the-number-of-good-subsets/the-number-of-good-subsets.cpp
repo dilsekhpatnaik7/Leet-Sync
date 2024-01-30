@@ -40,7 +40,7 @@ public:
         for(int i = 1; i < 31; i++) primeMask[i] = createMask(i);
         primeMask[1] = -1; 
 
-        long long res = helper(2,dp,cnt,primeMask,0);
+        long long res = helper(2, dp, cnt, primeMask, 0);
         long long op = 1;
      
         for(int i = 0 ; i < cnt[1]; i++) op = (op * 2) % mod;
